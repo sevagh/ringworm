@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/flyingmutant/rapid"
-	"github.com/sevagh/zoo/ringbuffer"
+	"github.com/sevagh/ringworm/ringbuffer1"
 )
 
 type ringbufferMachine struct {

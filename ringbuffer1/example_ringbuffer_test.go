@@ -3,7 +3,7 @@ package ringbuffer_test
 import (
 	"fmt"
 
-	"github.com/sevagh/zoo/ringbuffer"
+	"github.com/sevagh/ringworm/ringbuffer1"
 )
 
 func ExampleRingbuffer() {

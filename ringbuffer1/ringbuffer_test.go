@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/google/gofuzz"
-	"github.com/sevagh/zoo/ringbuffer"
+	"github.com/sevagh/ringworm/ringbuffer1"
 )
 
 func TestRingbufferNonPowerOfTwoSize(t *testing.T) {

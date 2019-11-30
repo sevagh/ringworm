@@ -72,7 +72,7 @@ func (r *Ringbuffer) Capacity() int {
 // Note that the capacity must be a power of two or an error is returned.
 func NewRingbuffer(capacity int) (Ringbuffer, error) {
 	if (capacity == 0) || ((capacity & (capacity - 1)) != 0) {
-		return Ringbuffer{}, fmt.Errorf("zoo/ringbuffer: please use a power-of-two size")
+		return Ringbuffer{}, fmt.Errorf("please use a power-of-two size")
 	}
 	buf := make([]byte, capacity)
 	return Ringbuffer{
@@ -86,12 +86,12 @@ func NewRingbuffer(capacity int) (Ringbuffer, error) {
 // Data is copied to storage[write:], and the write pointer is advanced by n
 // bytes written.
 //
-// If there isn't enough space for the entire write, it returns a zoo.Error.
+// If there isn't enough space for the entire write, it returns an Error.
 func (r *Ringbuffer) Write(buf []byte) error {
 	emptyCount := r.Capacity() - r.Size()
 
 	if len(buf) > emptyCount {
-		return fmt.Errorf("zoo/ringbuffer: write %d is too big for remaining capacity %d", len(buf), emptyCount)
+		return fmt.Errorf("write %d is too big for remaining capacity %d", len(buf), emptyCount)
 	}
 	desiredWrite := int32(len(buf))
 

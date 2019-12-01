@@ -4,7 +4,7 @@ Package ringbuffer implements a simple circular buffer.
 The indexing strategy is taken from the conversations here:
 https://www.snellman.net/blog/archive/2016-12-13-ring-buffers/
 
-The read and write pointers are int32s that are stored modulo 2*capacity,
+The read and write pointers are uint32s that are stored modulo 2*capacity,
 and are moduloed with capacity to index the underlying []byte storage.
 
 Here are some of the characteristics:
@@ -25,25 +25,25 @@ import (
 
 // A Ringbuffer is a struct that allows users to store and read []byte data.
 type Ringbuffer struct {
-	read  int32
-	write int32
+	read  uint32
+	write uint32
 	buf   []byte
 }
 
-func (r *Ringbuffer) mask(ptr int32) int32 {
-	return ptr & (int32(len(r.buf)) - 1)
+func (r *Ringbuffer) mask(ptr uint32) uint32 {
+	return ptr & (uint32(len(r.buf)) - 1)
 }
 
-func (r *Ringbuffer) mask2(ptr int32) int32 {
-	return ptr & (2*int32(len(r.buf)) - 1)
+func (r *Ringbuffer) mask2(ptr uint32) uint32 {
+	return ptr & (2*uint32(len(r.buf)) - 1)
 }
 
-func (r *Ringbuffer) writePtr() int32 {
-	return atomic.LoadInt32(&r.write)
+func (r *Ringbuffer) writePtr() uint32 {
+	return atomic.LoadUint32(&r.write)
 }
 
-func (r *Ringbuffer) readPtr() int32 {
-	return atomic.LoadInt32(&r.read)
+func (r *Ringbuffer) readPtr() uint32 {
+	return atomic.LoadUint32(&r.read)
 }
 
 // Size returns the size (bytes written by the user) of the ringbuffer.
@@ -93,9 +93,9 @@ func (r *Ringbuffer) Write(buf []byte) error {
 	if len(buf) > emptyCount {
 		return fmt.Errorf("write %d is too big for remaining capacity %d", len(buf), emptyCount)
 	}
-	desiredWrite := int32(len(buf))
+	desiredWrite := uint32(len(buf))
 
-	capacity := int32(len(r.buf))
+	capacity := uint32(len(r.buf))
 	writeIdx := r.mask(r.writePtr())
 
 	copy(r.buf[writeIdx:], buf)
@@ -106,8 +106,8 @@ func (r *Ringbuffer) Write(buf []byte) error {
 		copy(r.buf, buf[remain:])
 	}
 
-	atomic.AddInt32(&r.write, desiredWrite)
-	atomic.SwapInt32(&r.write, r.mask2(r.writePtr()))
+	atomic.AddUint32(&r.write, desiredWrite)
+	atomic.SwapUint32(&r.write, r.mask2(r.writePtr()))
 
 	return nil
 }
@@ -128,13 +128,13 @@ func (r *Ringbuffer) Read(buf []byte) {
 	if size < readCountTmp {
 		readCountTmp = r.Size()
 	}
-	readCount := int32(readCountTmp)
+	readCount := uint32(readCountTmp)
 
-	capacity := int32(len(r.buf))
+	capacity := uint32(len(r.buf))
 	readIdx := r.mask(r.readPtr())
 
-	var remain int32 = 0
-	var firstChunk int32 = 0
+	var remain uint32 = 0
+	var firstChunk uint32 = 0
 	possibleFirstChunk := capacity - readIdx
 
 	if readCount > possibleFirstChunk {
@@ -147,8 +147,8 @@ func (r *Ringbuffer) Read(buf []byte) {
 	copy(buf, r.buf[readIdx:readIdx+firstChunk])
 	copy(buf[firstChunk:], r.buf[:remain])
 
-	atomic.AddInt32(&r.read, int32(readCount))
-	atomic.SwapInt32(&r.read, r.mask2(r.readPtr()))
+	atomic.AddUint32(&r.read, uint32(readCount))
+	atomic.SwapUint32(&r.read, r.mask2(r.readPtr()))
 }
 
 // Drain creates and returns a []byte slice containing all data in the

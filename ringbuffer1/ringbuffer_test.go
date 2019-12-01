@@ -9,13 +9,6 @@ import (
 	"github.com/sevagh/ringworm/ringbuffer1"
 )
 
-func TestRingbufferNonPowerOfTwoSize(t *testing.T) {
-	_, err := ringbuffer.NewRingbuffer(3)
-	if err == nil {
-		t.Errorf("Expected error when creating non-power-of-two capacity ringbuffer")
-	}
-}
-
 func TestRingbufferEmptyReadDoesNothing(t *testing.T) {
 	ringbuf, _ := ringbuffer.NewRingbuffer(4)
 

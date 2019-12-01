@@ -8,7 +8,6 @@ The read and write pointers are uint32s that are stored modulo 2*capacity,
 and are moduloed with capacity to index the underlying []byte storage.
 
 Here are some of the characteristics:
-- Size must be power of two (for efficient modulo)
 - SPSC (single producer single consumer)
 - Lock-free using sync.atomic
 - Fixed size, no growing
@@ -21,6 +20,8 @@ package ringbuffer
 import (
 	"fmt"
 	"sync/atomic"
+
+	"github.com/bmkessler/fastdiv"
 )
 
 // A Ringbuffer is a struct that allows users to store and read []byte data.
@@ -28,14 +29,16 @@ type Ringbuffer struct {
 	read  uint32
 	write uint32
 	buf   []byte
+	n1    fastdiv.Uint32
+	n2    fastdiv.Uint32
 }
 
 func (r *Ringbuffer) mask(ptr uint32) uint32 {
-	return ptr & (uint32(len(r.buf)) - 1)
+	return r.n1.Mod(ptr)
 }
 
 func (r *Ringbuffer) mask2(ptr uint32) uint32 {
-	return ptr & (2*uint32(len(r.buf)) - 1)
+	return r.n2.Mod(ptr)
 }
 
 func (r *Ringbuffer) writePtr() uint32 {
@@ -69,16 +72,14 @@ func (r *Ringbuffer) Capacity() int {
 }
 
 // NewRingbuffer creates a ringbuffer with the specified capacity.
-// Note that the capacity must be a power of two or an error is returned.
 func NewRingbuffer(capacity int) (Ringbuffer, error) {
-	if (capacity == 0) || ((capacity & (capacity - 1)) != 0) {
-		return Ringbuffer{}, fmt.Errorf("please use a power-of-two size")
-	}
 	buf := make([]byte, capacity)
 	return Ringbuffer{
 		read:  0,
 		write: 0,
 		buf:   buf,
+		n1:    fastdiv.NewUint32(uint32(len(buf))),
+		n2:    fastdiv.NewUint32(uint32(2 * len(buf))),
 	}, nil
 }
 

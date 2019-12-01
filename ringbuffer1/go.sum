@@ -1,3 +1,5 @@
+github.com/bmkessler/fastdiv v0.0.0-20190227075523-41d5178f2044 h1:8Rz0TcIbkvU+x53bDQgezQ3tbjrQSpZRr6h9JnR9lZU=
+github.com/bmkessler/fastdiv v0.0.0-20190227075523-41d5178f2044/go.mod h1:OI0uaNyGvxANSxteY6/mFRZs9EcQGqK30Bd1wqQj9zQ=
 github.com/flyingmutant/rapid v0.0.0-20190904072629-5761511f78c8 h1:OnvMbsaIwSDKu9PAFhSLcjJZcCpW/cTAwSa2ysl2NrQ=
 github.com/flyingmutant/rapid v0.0.0-20190904072629-5761511f78c8/go.mod h1:DPTQ0FCCNncrUta8PWuWx0OTWIS4Q8RxPXn45rqMoPg=
 github.com/flyingmutant/rapid v0.2.0 h1:MuUmVHJ+p4IoJ5BiUZgHHrgzeu9ieEPUYdPeR4or0NI=

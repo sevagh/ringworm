@@ -17,7 +17,7 @@ type ringbufferMachine struct {
 func (m *ringbufferMachine) Init(t *rapid.T) {
 	n := rapid.IntsRange(1, 20).Draw(t, "n").(int)
 	ringbufSizePowerOfTwo := 1 << n
-	m.r, _ = ringbuffer.NewRingbuffer(ringbufSizePowerOfTwo)
+	m.r = ringbuffer.NewRingbuffer(ringbufSizePowerOfTwo)
 
 	t.Logf("Created ringbuffer with size 2^%d = %d\n", n, ringbufSizePowerOfTwo)
 	m.n = n

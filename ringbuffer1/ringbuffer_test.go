@@ -10,7 +10,7 @@ import (
 )
 
 func TestRingbufferEmptyReadDoesNothing(t *testing.T) {
-	ringbuf, _ := ringbuffer.NewRingbuffer(4)
+	ringbuf := ringbuffer.NewRingbuffer(4)
 
 	emptyBytes := make([]byte, 4)
 	readBuf := make([]byte, 4)
@@ -22,7 +22,7 @@ func TestRingbufferEmptyReadDoesNothing(t *testing.T) {
 }
 
 func TestRingbufferReadTooMuchOnlyDrains(t *testing.T) {
-	ringbuf, _ := ringbuffer.NewRingbuffer(4)
+	ringbuf := ringbuffer.NewRingbuffer(4)
 
 	writeBuf := []byte{0, 1, 2, 3}
 	err := ringbuf.Write(writeBuf)
@@ -94,7 +94,7 @@ func TestRingbufferReadTooMuchOnlyDrains(t *testing.T) {
 }
 
 func TestRingbufferFillCount(t *testing.T) {
-	ringbuf, _ := ringbuffer.NewRingbuffer(128)
+	ringbuf := ringbuffer.NewRingbuffer(128)
 	if !ringbuf.Empty() {
 		t.Errorf("Expected ringbuf to be empty")
 	}
@@ -120,7 +120,7 @@ func TestRingbufferFillCount(t *testing.T) {
 }
 
 func TestRingbufferWrite(t *testing.T) {
-	ringbuf, _ := ringbuffer.NewRingbuffer(32)
+	ringbuf := ringbuffer.NewRingbuffer(32)
 
 	testData := "hello, world!"
 	dataBuf := []byte(testData)
@@ -145,7 +145,7 @@ func TestRingbufferWrite(t *testing.T) {
 }
 
 func TestRingbufferWriteTooMuch(t *testing.T) {
-	ringbuf, _ := ringbuffer.NewRingbuffer(4)
+	ringbuf := ringbuffer.NewRingbuffer(4)
 
 	testData := "hello, world!"
 	dataBuf := []byte(testData)
@@ -157,7 +157,7 @@ func TestRingbufferWriteTooMuch(t *testing.T) {
 }
 
 func TestRingbufferWriteMultiple(t *testing.T) {
-	ringbuf, _ := ringbuffer.NewRingbuffer(32)
+	ringbuf := ringbuffer.NewRingbuffer(32)
 
 	testData := []string{
 		"aaaaaaaaaaaaaaaa",
@@ -191,7 +191,7 @@ func TestRingbufferWriteMultiple(t *testing.T) {
 }
 
 func TestRingbufferWriteConcurrent(t *testing.T) {
-	ringbuf, _ := ringbuffer.NewRingbuffer(512)
+	ringbuf := ringbuffer.NewRingbuffer(512)
 
 	wg := sync.WaitGroup{}
 	wg.Add(2)
@@ -223,7 +223,7 @@ func TestRingbufferWriteConcurrent(t *testing.T) {
 }
 
 func TestRingbufferDrain(t *testing.T) {
-	ringbuf, _ := ringbuffer.NewRingbuffer(32)
+	ringbuf := ringbuffer.NewRingbuffer(32)
 
 	testData := []string{
 		"aaaaaaaaaaaaaaaa",
@@ -252,7 +252,7 @@ func TestRingbufferDrain(t *testing.T) {
 }
 
 func TestRingbufferWriteptrAdvances(t *testing.T) {
-	ringbuf, _ := ringbuffer.NewRingbuffer(64)
+	ringbuf := ringbuffer.NewRingbuffer(64)
 
 	testData := []string{
 		"aaaaaaaaaaaaaaaa",
@@ -290,7 +290,7 @@ func TestRingbufferWriteptrAdvances(t *testing.T) {
 }
 
 func TestRingbufferFuzzBytes(t *testing.T) {
-	ringbuf, _ := ringbuffer.NewRingbuffer(128)
+	ringbuf := ringbuffer.NewRingbuffer(128)
 
 	writeBuf := make([]byte, 64)
 

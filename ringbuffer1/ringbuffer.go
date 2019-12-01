@@ -72,7 +72,7 @@ func (r *Ringbuffer) Capacity() int {
 }
 
 // NewRingbuffer creates a ringbuffer with the specified capacity.
-func NewRingbuffer(capacity int) (Ringbuffer, error) {
+func NewRingbuffer(capacity int) Ringbuffer {
 	buf := make([]byte, capacity)
 	return Ringbuffer{
 		read:  0,
@@ -80,7 +80,7 @@ func NewRingbuffer(capacity int) (Ringbuffer, error) {
 		buf:   buf,
 		n1:    fastdiv.NewUint32(uint32(len(buf))),
 		n2:    fastdiv.NewUint32(uint32(2 * len(buf))),
-	}, nil
+	}
 }
 
 // Write copies all the bytes in the provided []byte slice into the ringbuffer.

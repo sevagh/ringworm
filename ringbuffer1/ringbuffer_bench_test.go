@@ -9,7 +9,7 @@ import (
 
 func BenchmarkManyRingbuffersBillionsOfIntegers(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		ringbuf, _ := ringbuffer.NewRingbuffer(64)
+		ringbuf := ringbuffer.NewRingbuffer(64)
 		writeBuf := make([]byte, 4)
 		readBuf := make([]byte, 4)
 
